@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 
-
+from django.views import View
 
 from orders.models import Order
 
 APPLICATION='administration'
-class OrdesView(View):
+class OrdersView(View):
     view_name='orders'
     template=f'{APPLICATION}/{view_name}.html'
     def get(self, request, *args, **kwargs):

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import cloudinary
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,7 +44,7 @@ INSTALLED_APPS+=[
     'items.apps.ItemsConfig',
     'orders.apps.OrdersConfig',
     'users.apps.UsersConfig',
-
+    'cloudinary',
 ]
 INSTALLED_APPS += [
 
@@ -125,7 +126,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+cloudinary.config(
+    cloud_name = "dgjvthpnh",
+    api_key = "875298853688417",
+    api_secret = "0nkrKbN5bPew17Ntax3BzzMzCXo"
+)
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 

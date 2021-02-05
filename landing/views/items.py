@@ -1,6 +1,6 @@
-from django.shortcuts import render,HttpResponseRedirect,get_object_or_404
+from django.shortcuts import render,HttpResponseRedirect,get_object_or_404,HttpResponse
 from django.utils.html import escapejs
-
+from django.views import View
 import simplejson as JSON
 
 from items.models import Item
@@ -19,11 +19,11 @@ def Items_data(request):
     data={}
     json_item=[]
     
-    item_reference= esca(request.POST.get("item_reference",None))
-    if item_reference in None:
+    item_reference=request.POST.get("item_reference")
+    if item_reference =="":
         try:
             item=get_object_or_404(Item,reference=item_reference)
-            data['item']=single_item(item))
+            data['item']=single_item(item)
             data['response_code']=0
         except:
             data['response_code']=-2
@@ -36,3 +36,17 @@ def Items_data(request):
     data['items']=json_item
     data['response_code']=0  
     return HttpResponse(JSON.dumps(data), content_type='application/json')
+
+APPLICATION='landing'
+class CatalogView(View):
+    view_name='items'
+    template=f'{APPLICATION}/{view_name}.html'
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template)
+
+class ItemView(View):
+    view_name='item'
+    template=f'{APPLICATION}/{view_name}.html'
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template)
+

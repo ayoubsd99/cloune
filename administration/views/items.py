@@ -4,6 +4,8 @@ from django.utils.html import escapejs
 from django.views import View
 from django.contrib import messages
 
+import cloudinary
+
 from items.models import Item,GroupOption,ItemImage,Option,Category,Variant
 
 APPLICATION='administration'
@@ -55,10 +57,12 @@ class CreateItemView(View):
         category=escapejs(request.POST.get("category",None))
         price=escapejs(request.POST.get("price",None))
         discount_price=escapejs(request.POST.get("discount_price",None))
-        #images=escapejs(request.POST.get("images",None))
-        if(option1 is None,option2 is None,option3 is None,
-        category is None,price is None,discount_price is None,
-        title is None,small_desc is None,big_desc is None,):
+        image1=request.FILES("image1")
+        image1=request.FILES("image2")
+        image1=request.FILES("image3")
+        if(option1 is None or option2 is None or option3 is None or
+        category is None or price is None or discount_price is None or
+        title is None or small_desc is None or big_desc is None):
 
             return HttpResponseRedirect(reverse('CreateItem', ))
         try:
@@ -69,7 +73,12 @@ class CreateItemView(View):
             grp_op=GroupOption.objects.create(opti1,opti2,opti3)
             variant=Variant.objects.create(price=float(price),discount_price=float(discount_price),group_option=grp_op)
             item=Item.objects.create(title=title,small_desc=small_desc,big_desc=big_desc,category=cat,varient=variant)
-            #add images
+            images=[image1,image2,image3]
+            urls=[]
+            for image in images:
+                urls.append(response['secure_url'])
+            for url in urls:
+                ItemImage.objects.create(item=item,image=url)    
             messages.success(request,'data added succesfuly')  
         except:
             messages.error(request,'failed to add data')

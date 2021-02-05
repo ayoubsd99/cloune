@@ -2,6 +2,7 @@ from django.shortcuts import render,HttpResponseRedirect
 from django.utils.html import escapejs
 from django.urls import reverse
 from django.contrib import messages
+from django.views import View
 from orders.models import Order,Line,Customer,Payment,PaymentStatus
 from core.views import check_email,check_phone
 
@@ -32,5 +33,11 @@ def create_order(request):
     except:
         messages.error(request,'faild to add command')
 
-
+APPLICATION='landing'
+class CreateOrderView(View):
+    view_name='createorder'
+    template=f'{APPLICATION}/{view_name}'
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template)
+        
 
